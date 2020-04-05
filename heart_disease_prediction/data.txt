@@ -1,0 +1,126 @@
+package com.example.softtech;
+
+public class data {
+    private Integer age;
+    private Integer sex;
+    private Integer chest;
+    private Integer bp;
+    private Integer chol;
+    private Integer sugar;
+    private Integer elec;
+    private Integer maxheartrate;
+    private Integer angina;
+    private Integer peak;
+    private Integer slope;
+    private Integer flour;
+    private Integer thal;
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Integer getChest() {
+        return chest;
+    }
+
+    public void setChest(Integer chest) {
+        this.chest = chest;
+    }
+
+    public Integer getBp() {
+        return bp;
+    }
+
+    public void setBp(Integer bp) {
+        this.bp = bp;
+    }
+
+    public Integer getChol() {
+        return chol;
+    }
+
+    public void setChol(Integer chol) {
+        this.chol = chol;
+    }
+
+    public Integer getSugar() {
+        return sugar;
+    }
+
+    public void setSugar(Integer sugar) {
+        this.sugar = sugar;
+    }
+
+    public Integer getElec() {
+        return elec;
+    }
+
+    public void setElec(Integer elec) {
+        this.elec = elec;
+    }
+
+    public Integer getMaxheartrate() {
+        return maxheartrate;
+    }
+
+    public void setMaxheartrate(Integer maxheartrate) {
+        this.maxheartrate = maxheartrate;
+    }
+
+    public Integer getAngina() {
+        return angina;
+    }
+
+    public void setAngina(Integer angina) {
+        this.angina = angina;
+    }
+
+    public Integer getPeak() {
+        return peak;
+    }
+
+    public void setPeak(Integer peak) {
+        this.peak = peak;
+    }
+
+    public Integer getSlope() {
+        return slope;
+    }
+
+    public void setSlope(Integer slope) {
+        this.slope = slope;
+    }
+
+    public Integer getFlour() {
+        return flour;
+    }
+
+    public void setFlour(Integer flour) {
+        this.flour = flour;
+    }
+
+    public Integer getThal() {
+        return thal;
+    }
+
+    public void setThal(Integer thal) {
+        this.thal = thal;
+    }
+
+    public data(){
+
+    }
+
+}

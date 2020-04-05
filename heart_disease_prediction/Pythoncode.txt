@@ -1,0 +1,131 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+import pyrebase as pb
+
+df = pd.read_csv("C:/Users/hp/Desktop/heart.csv")
+
+df.head()
+
+df.target.value_counts()
+
+
+firebaseConfig = {
+   "apiKey": "AIzaSyDooyvOrRTtGB_Pw7Mw8_829Au33n1JyjM",
+    "authDomain": "softtech-80e2b.firebaseapp.com",
+    "databaseURL": "https://softtech-80e2b.firebaseio.com",
+    "projectId": "softtech-80e2b",
+    "storageBucket": "softtech-80e2b.appspot.com",
+    "messagingSenderId": "742711257629",
+    "appId": "1:742711257629:web:4192eacfcda38fc46174f4"
+  };
+
+firebase=pb.initialize_app(firebaseConfig)
+db=firebase.database();
+age=db.child("data").child("age").get()
+angina=db.child("data").child("angina").get()
+bp=db.child("data").child("bp").get()
+#chest=db.child("data").child("chest").get()
+chol=db.child("data").child("chol").get()
+elec=db.child("data").child("elec").get()
+flour=db.child("data").child("flour").get()
+maxheartrate=db.child("data").child("maxheartrate").get()
+peak=db.child("data").child("peak").get()
+#slope=db.child("data").child("slope").get()
+sex=db.child("data").child("sex").get()
+sugar=db.child("data").child("sugar").get()
+#thal=db.child("data").child("thal").get()
+
+
+stc={
+ 'Age':[age.val()],
+ 'Angina':[angina.val()],
+ 'Bp':[bp.val()],
+# 'Chest':[chest.val()],
+ 'Chol':[chol.val()],
+ 'Elec':[elec.val()],
+ 'Flour':[flour.val()],
+ 'Maxheartrate':[maxheartrate.val()],
+ 'Peak':[peak.val()],
+# 'Slope':[slope.val()],
+ 'Sex':[sex.val()],
+ 'Sugar':[sugar.val()],
+# 'Thal':[thal.val()],
+ }
+
+
+
+countNoDisease = len(df[df.target == 0])
+countHaveDisease = len(df[df.target == 1])
+print("Percentage of Patients Haven't Heart Disease: {:.2f}%".format((countNoDisease / (len(df.target))*100)))
+print("Percentage of Patients Have Heart Disease: {:.2f}%".format((countHaveDisease / (len(df.target))*100)))
+
+sns.countplot(x='sex', data=df, palette="mako_r")
+plt.xlabel("Sex (0 = female, 1= male)")
+plt.show()
+
+
+pd.crosstab(df.sex,df.target).plot(kind="bar",figsize=(15,6),color=['#1CA53B','#AA1111' ])
+plt.title('Heart Disease Frequency for Sex')
+plt.xlabel('Sex (0 = Female, 1 = Male)')
+plt.xticks(rotation=0)
+plt.legend(["Haven't Disease", "Have Disease"])
+plt.ylabel('Frequency')
+plt.show()
+
+
+df = df.drop(columns = ['cp', 'thal', 'slope'])
+df.head()
+
+y = df.target.values
+x_data = df.drop(['target'], axis = 1)
+
+x = (x_data - np.min(x_data)) / (np.max(x_data) - np.min(x_data)).values
+
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size = 0.2,random_state=35)
+x_train = x_train.T
+y_train = y_train.T
+x_test = x_test.T
+y_test = y_test.T
+
+from sklearn.neighbors import KNeighborsClassifier
+
+
+accuracies = {}
+hello=pd.DataFrame(stc)
+
+knn = KNeighborsClassifier(n_neighbors = 3)  
+knn.fit(x_train.T, y_train.T)
+
+
+print("{} NN Score: {:.2f}%".format(3, knn.score(x_test.T, y_test.T)*100))
+scoreList = []
+for i in range(1,20):
+    knn2 = KNeighborsClassifier(n_neighbors = i)  
+    knn2.fit(x_train.T, y_train.T)
+    scoreList.append(knn2.score(x_test.T, y_test.T))
+    
+plt.plot(range(1,20), scoreList)
+plt.xticks(np.arange(1,20,1))
+plt.xlabel("K value")
+plt.ylabel("Score")
+plt.show()
+
+acc = max(scoreList)*100
+accuracies['KNN'] = acc
+print("Accuracy is {:.2f}%".format(acc))
+
+print("Your entered data is:")
+print(hello.iloc[0])
+knn.fit(x_train.T, y_train.T)
+predi = knn.predict(hello)
+print(predi)
+if predi==1:
+    print("High chances of Heart Disease found.")
+    print("Please, visit the Doctor")
+else:
+    print("Hoorahhh!!!")
+    print("You have a healthy heart")
+    print("Dont forget to have a regular checkup")
